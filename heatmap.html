@@ -24,7 +24,7 @@
                         clarity: encodeClarity(row.clarity)
                     }));
                     // Print the clarity, color, and cut of the first row for debugging
-                    //console.log(encodedData);
+                    console.log(encodedData);
                     //console.log(data[0].clarity); // Log the first row
                     const corrMatrix = computerCorrelationMatrix(encodedData);
                     //heatmap
@@ -55,15 +55,15 @@
                         // for (let j = 0; j < headers.length; j++){
                         //     obj[headers[j]] = values[j].replace(/\"/g, '').replace(/\\/g, '');
                         // }
-                        // // Convert numeric values to numbers
-                        // obj['carat'] = parseFloat(obj['carat']);
-                        // obj['depth'] = parseFloat(obj['depth']);
-                        // obj['table'] = parseFloat(obj['table']);
-                        // obj['price'] = parseInt(obj['price']);
-                        // obj['x'] = parseFloat(obj['x']);
-                        // obj['y'] = parseFloat(obj['y']);
-                        // obj['z'] = parseFloat(obj['z']);
-                        // // Convert numeric values to numbers
+                        // Convert numeric values to numbers
+                        obj['carat'] = parseFloat(obj['carat']);
+                        obj['depth'] = parseFloat(obj['depth']);
+                        obj['table'] = parseFloat(obj['table']);
+                        obj['price'] = parseInt(obj['price']);
+                        obj['x'] = parseFloat(obj['x']);
+                        obj['y'] = parseFloat(obj['y']);
+                        obj['z'] = parseFloat(obj['z']);
+                        // Convert numeric values to numbers
                         data.push(obj);
                     }
                 }
@@ -158,6 +158,18 @@
                 }
                 return correlationMatrix;
             }
+
+            // Sample data
+            const data = [
+                { carat: 0.71, clarity: 2, color: 0, cut: 4, depth: 60.2, price: 2822, table: 56, x: 5.86, y: 5.83, z: 3.52 }
+                // Add more data points as needed
+            ];
+
+            // Calculate correlation matrix
+            const correlationMatrix = computerCorrelationMatrix(data);
+
+            // Log correlation matrix
+            console.log(correlationMatrix);
         </script>
     </body>
 </html>
