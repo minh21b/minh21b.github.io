@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Correlation Heatmap</title>
+        <script src="https://cdn.plot.ly/plotly-2.5.1.min.js"></script>
+    </head>
+    <body>
+        <div id="heatmap">
+
+        </div>
+        <script>
+            //load the diamonds dataset
+            fetch("diamonds.csv")
+                .then(response => response.text())
+                .then(csvData => {
+                    const data = processData(csvData);
+                    // Encode categorical variables (cut, color, clarity) into numerical values
+                    const encodedData = data.map(row => ({
+                        ...row,
+                        cut: encodeCut(row.cut),
+                        color: encodeColor(row.color),
+                        clarity: encodeClarity(row.clarity)
+                    }));
+                    // Print the clarity, color, and cut of the first row for debugging
+                    //console.log(encodedData);
+                    //console.log(data[0].clarity); // Log the first row
+                    const corrMatrix = computerCorrelationMatrix(encodedData);
+                    //heatmap
+                    const trace = {
+                        z: corrMatrix,
+                        x: ['carat', 'cut', 'color', 'clarity', 'depth', 'table', 'price', 'x', 'y', 'z'],
+                        y: ['carat', 'cut', 'color', 'clarity', 'depth', 'table', 'price', 'x', 'y', 'z'],
+                        type: 'heatmap',
+                        colorscale: 'Viridis',
+                        reversescale: true,
+                        showscale: true
+                    };
+                    Plotly.newPlot('heatmap', [trace], {margin: {t:50}});
+                });
+
+            //process csv data into array of objects
+            function processData(csvData){
+                const lines = csvData.split('\n');
+                const headers = lines[0].split(',').map(header => header.replace(/^"|"$/g, ''));
+                const data = [];
+                for (let i = 1; i < lines.length; i++){
+                    const values = lines[i].split(',');
+                    if(values.length === headers.length){
+                        const obj = {};
+                        headers.forEach((header, index) => {
+                            obj[header.trim()] = values[index].trim();
+                        });
+                        // for (let j = 0; j < headers.length; j++){
+                        //     obj[headers[j]] = values[j].replace(/\"/g, '').replace(/\\/g, '');
+                        // }
+                        // // Convert numeric values to numbers
+                        // obj['carat'] = parseFloat(obj['carat']);
+                        // obj['depth'] = parseFloat(obj['depth']);
+                        // obj['table'] = parseFloat(obj['table']);
+                        // obj['price'] = parseInt(obj['price']);
+                        // obj['x'] = parseFloat(obj['x']);
+                        // obj['y'] = parseFloat(obj['y']);
+                        // obj['z'] = parseFloat(obj['z']);
+                        // // Convert numeric values to numbers
+                        data.push(obj);
+                    }
+                }
+                return data;
+            }
+            // Function to encode 'cut' into numerical values
+            function encodeCut(cut) {
+                cut = cut.replace(/\"/g, ''); // Remove double quotes
+                switch (cut) {
+                    case 'Fair':
+                    return 0;
+                    case 'Good':
+                    return 1;
+                    case 'Very Good':
+                    return 2;
+                    case 'Premium':
+                    return 3;
+                    case 'Ideal':
+                    return 4;
+                    default:
+                    return -1; // Handle unknown categories if needed
+                }
+            }
+
+            // Function to encode 'color' into numerical values
+            function encodeColor(color) {
+                color = color.replace(/\"/g, '');
+                switch (color) {
+                    case 'D':
+                    return 0;
+                    case 'E':
+                    return 1;
+                    case 'F':
+                    return 2;
+                    case 'G':
+                    return 3;
+                    case 'H':
+                    return 4;
+                    case 'I':
+                    return 5;
+                    case 'J':
+                    return 6;
+                    default:
+                    return -1; // Handle unknown categories if needed
+                }
+            }
+
+            // Function to encode 'clarity' into numerical values
+            function encodeClarity(clarity) {
+                clarity = clarity.replace(/\"/g, '');
+                switch (clarity) {
+                    case 'I1':
+                    return 0;
+                    case 'SI2':
+                    return 1;
+                    case 'SI1':
+                    return 2;
+                    case 'VS2':
+                    return 3;
+                    case 'VS1':
+                    return 4;
+                    case 'VVS2':
+                    return 5;
+                    case 'VVS1':
+                    return 6;
+                    case 'IF':
+                    return 7;
+                    default:
+                    return -1; // Handle unknown categories if needed
+                }
+            }
+            //correlation matrix
+            function computerCorrelationMatrix(data){
+                const numericData = data.map(row => Object.values(row).map(Number));
+                const columns = numericData[0].length;
+                const correlationMatrix = Array(columns).fill().map(() => Array(columns).fill(0));
+                for (let i = 0; i< columns; i++){
+                    for (let j = 0; j < columns; j++){
+                        let sumXY = 0, sumX = 0, sumY = 0, sumXSquare = 0, sumYSquare = 0;
+                        const n = data.length;
+                        for (let k = 0; k < n; k++){
+                            sumXY += numericData[k][i] * numericData[k][j];
+                            sumX += numericData[k][i];
+                            sumY += numericData[k][j];
+                            sumXSquare += numericData[k][i] ** 2;
+                            sumYSquare += numericData[k][j] ** 2;
+                        }
+                        const numerator = n * sumXY - sumX * sumY;
+                        const denominator = Math.sqrt((n * sumXSquare - sumX ** 2)*(n * sumYSquare - sumY ** 2));
+                        correlationMatrix[i][j] = correlationMatrix[j][i] = numerator / denominator;
+                    }
+                }
+                return correlationMatrix;
+            }
+        </script>
+    </body>
+</html>

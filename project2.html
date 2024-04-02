@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Unveiling the Brilliance: Exploring Patterns in Diamond Characteristics</title>
+        <style>
+            body {
+                font-family: 'Lora', serif;
+                margin: 0;
+                padding: 0;
+                background: #fff;
+                color: #333;
+            }
+    
+            .header {
+                font-family: 'Nunito', sans-serif;
+                background: linear-gradient(0.25turn, #02aef8, #f14848);
+                color: #000;
+                padding: 20px;
+                text-align: center;
+            }
+    
+            .container {
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+    
+            .intro {
+                padding: 20px;
+                font-size: 18px;
+                line-height: 1.6;
+            }
+    
+            /* Section styling */
+            .section {
+                margin: 40px 0;
+            }
+    
+            .narrative {
+                padding: 0 20px;
+                font-size: 18px;
+            }
+    
+            /* Graph container styling */
+            .graphic {
+                margin: 20px auto;
+            }
+    
+            embed {
+                height: 230px;
+                overflow: hidden !important;
+                /* Default height for mobile screens */
+            }
+    
+            @media screen and (min-width: 768px) {
+    
+                /* Apply these styles for screens that are 768px wide or wider */
+                embed {
+                    height: 500px;
+                    overflow: hidden !important;
+                    /* Height for laptop screens */
+                }
+            }
+            .tooltip {
+                position: absolute;
+                text-align: center;
+                width: 60px;
+                height: 28px;
+                padding: 2px;
+                font: 12px sans-serif;
+                background: lightsteelblue;
+                border: 0px;
+                border-radius: 8px;
+                pointer-events: none;
+                opacity: 0;
+            }
+    
+            footer {
+                font-family: 'Lora', serif;
+                text-align: center;
+                padding: 10px;
+                margin-top: 40px;
+                border-top: 1px solid #ccc;
+            }
+    
+            svg {
+                height: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Unveiling the Brilliance: Exploring Patterns in Diamond Characteristics</h1>
+            <h4><i>Explore the diamonds</i></h4>
+        </div>
+        <div class="intro">
+            <h2>Introduction</h2>
+            <p>
+                The diamond industry is one of the most lucrative markets globally, 
+                yet pricing remains a complex aspect for consumers and industry professionals. 
+                This project aims to uncover the factors influencing diamond pricing using the diamonds dataset from the ggplot2 package in R. 
+                Despite being widely recognized as a valuable commodity, the pricing of diamonds often seems arbitrary and subjective. 
+                Consumers face challenges in understanding the factors driving diamond prices, 
+                while industry professionals grapple with pricing strategies amidst varying market dynamics. 
+                This project seeks to create interactive visualizations to help consumers understand the effects of certain diamonds’ characteristics 
+                on their pricing easier. The primary objective of this project is to analyze the diamonds dataset and create visualizations to uncover 
+                the relationships between various attributes of diamonds (such as carat, cut, color, clarity, etc.) and their corresponding prices. 
+                By doing so, we aim to provide insights into the factors driving diamond pricing, 
+                thus enabling both consumers and industry professionals to make more informed decisions.
+            </p>
+        </div>
+        <div class="narrative">
+            <h2>A Glowing Tapestry: Heatmap Visualization of Diamond Characteristics</h2>
+            <p>
+                Discussion about the heatmap and takeaways from the heatmap.
+            </p>
+            <div class="graphic">
+                <iframe src="heatmap.html" width="100%" height="600px" frameborder="0"></iframe>
+            </div>
+        </div>
+        <div class="narrative">
+            <h2>Second section</h2>
+            <p>
+                This section would be where an interactive visualization on how different characteristics influence the prices of diamonds.
+                User will be able to choose between different characteristics (cut, clarity, color, diamond dimensions, etc).
+
+            </p>
+        </div>
+
+    </body>
+</html>
