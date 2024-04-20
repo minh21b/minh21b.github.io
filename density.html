@@ -7,7 +7,9 @@
         <script src="https://cdn.plot.ly/plotly-2.5.1.min.js"></script>
     </head>
     <body>
-        <div id="heatmap">
+        <br>
+
+        <div id="density">
 
         </div>
         <script>
@@ -23,19 +25,38 @@
                         color: encodeColor(row.color),
                         clarity: encodeClarity(row.clarity)
                     }));
-                    //console.log(data[0].clarity); // Log the first row
-                    const corrMatrix = computerCorrelationMatrix(encodedData);
-                    //heatmap
-                    const trace = {
-                        z: corrMatrix,
-                        x: ['carat', 'cut', 'color', 'clarity', 'depth', 'table', 'price', 'x', 'y', 'z', 'volume'],
-                        y: ['carat', 'cut', 'color', 'clarity', 'depth', 'table', 'price', 'x', 'y', 'z', 'volume'],
-                        type: 'heatmap',
-                        colorscale: 'Viridis',
-                        reversescale: true,
-                        showscale: true
+                    const traces = [];
+                    const categories = ['cut', 'color', 'clarity'];
+                    categories.forEach(category => {
+                        const uniqueValues = Array.from(new Set(encodedData.map(d => d[category])));
+                        uniqueValues.forEach(value => {
+                            const filteredData = encodedData.filter(d => d[category] === value).map(d => d.price);
+                            const trace = {
+                                x: filteredData,
+                                type: 'histogram',
+                                histnorm: 'probability density',
+                                name: `${category} - ${decodeValue(category, value)}`,
+                                visible: false // Hide trace initially
+                            };
+                            traces.push(trace);
+                        });
+                    });
+                    const layout = {
+                        title: 'Kernel Density Estimation (KDE) Plot',
+                        xaxis: { title: 'Price' },
+                        yaxis: { title: 'Probability Density' , tickformat: '.5f' },
+                        updatemenus: [{
+                            buttons: categories.map(category => ({
+                                method: 'restyle',
+                                label: category,
+                                args: [{'visible': traces.map(trace => trace.name.includes(category))}]
+                            })),
+                            direction: 'down',
+                            showactive: true
+                        }],
                     };
-                    Plotly.newPlot('heatmap', [trace], {margin: {t:50}});
+                    Plotly.newPlot('density', traces, layout);
+
                 });
 
             //process csv data into array of objects
@@ -61,7 +82,6 @@
                         obj['x'] = parseFloat(obj['x']);
                         obj['y'] = parseFloat(obj['y']);
                         obj['z'] = parseFloat(obj['z']);
-                        obj['volume'] = obj['x'] * obj['y'] * obj['z'];
                         // Convert numeric values to numbers
                         data.push(obj);
                     }
@@ -134,30 +154,23 @@
                     return -1; // Handle unknown categories if needed
                 }
             }
-            //correlation matrix
-            function computerCorrelationMatrix(data){
-                const numericData = data.map(row => Object.values(row).map(Number));
-                const columns = numericData[0].length;
-                const correlationMatrix = Array(columns).fill().map(() => Array(columns).fill(0));
-                for (let i = 0; i< columns; i++){
-                    for (let j = 0; j < columns; j++){
-                        let sumXY = 0, sumX = 0, sumY = 0, sumXSquare = 0, sumYSquare = 0;
-                        const n = data.length;
-                        for (let k = 0; k < n; k++){
-                            sumXY += numericData[k][i] * numericData[k][j];
-                            sumX += numericData[k][i];
-                            sumY += numericData[k][j];
-                            sumXSquare += numericData[k][i] ** 2;
-                            sumYSquare += numericData[k][j] ** 2;
-                        }
-                        const numerator = n * sumXY - sumX * sumY;
-                        const denominator = Math.sqrt((n * sumXSquare - sumX ** 2)*(n * sumYSquare - sumY ** 2));
-                        correlationMatrix[i][j] = correlationMatrix[j][i] = numerator / denominator;
-                    }
-                }
-                return correlationMatrix;
-            }
 
+            // Function to decode encoded values back to category names
+            function decodeValue(category, value) {
+                switch (category) {
+                    case 'cut':
+                        const cutNames = ['Fair', 'Good', 'Very Good', 'Premium', 'Ideal'];
+                        return cutNames[value];
+                    case 'color':
+                        const colorNames = ['D', 'E', 'F', 'G', 'H', 'I', 'J'];
+                        return colorNames[value];
+                    case 'clarity':
+                        const clarityNames = ['I1', 'SI2', 'SI1', 'VS2', 'VS1', 'VVS2', 'VVS1', 'IF'];
+                        return clarityNames[value];
+                    default:
+                        return value; // Return the original value if no decoding needed
+                }
+            }
         </script>
     </body>
 </html>

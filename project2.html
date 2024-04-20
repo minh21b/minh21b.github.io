@@ -112,20 +112,137 @@
         <div class="narrative">
             <h2>A Glowing Tapestry: Heatmap Visualization of Diamond Characteristics</h2>
             <p>
-                Discussion about the heatmap and takeaways from the heatmap.
+                The heatmap of the diamonds dataset provides a visual representation of the Pearson correlation coefficients between pairs of features. 
+                Let’s explore the key insights:
+            </p>
+            <p>
+                Positive Correlations:
+                <ul>
+                    <li><strong>Carat and Price:</strong> As expected, larger diamonds (higher carat weight) tend to be more expensive.</li>
+                    <li><strong>Carat and Dimensions (x, y, z):</strong> Bigger diamonds have larger dimensions.</li>
+                    <li><strong>Price and Dimensions:</strong> Price correlates positively with the diamond’s dimensions.</li>
+                    <li><strong>Depth and Table:</strong> A subtle positive correlation exists between depth and table width.</li>
+                </ul>
+            </p>
+            <p>
+                Negative Correlations:
+                <ul>
+                    <li><strong>Carat and Clarity:</strong> Surprisingly, diamonds with higher carat weights tend to have lower clarity grades.</li>
+                    <li><strong>Depth and Price:</strong> Deeper diamonds are not necessarily more expensive.</li>
+                    <li><strong>Color and Clarity:</strong> Slightly negative correlation between color and clarity.</li>
+                </ul>
             </p>
             <div class="graphic">
                 <iframe src="heatmap.html" width="100%" height="600px" frameborder="0"></iframe>
             </div>
-        </div>
-        <div class="narrative">
-            <h2>Second section</h2>
             <p>
-                This section would be where an interactive visualization on how different characteristics influence the prices of diamonds.
-                User will be able to choose between different characteristics (cut, clarity, color, diamond dimensions, etc).
+                In this radiant journey through the diamonds dataset, we’ve witnessed correlations that sparkle like facets on a flawless gemstone. 
+                Through its various features such as carat, cut, color, clarity, and more, we gain valuable insights into the characteristics that define these exquisite gems.
+                By interpreting these patterns, we gain a deeper understanding of how carat weight, clarity, color, and dimensions shape the allure and pricing of diamonds.
 
             </p>
         </div>
-
+        <div class="narrative">
+            <h2>Price Dynamics: Unveiling the Impact of Cut, Color, and Clarity on Diamond Values</h2>
+            <p>
+                In this section, we will explore the relationships between the key features of diamonds
+                – cut, clarity, and color – and their corresponding prices through Kernel Density Estimation (KDE) plots. 
+                These plots provide a visual representation of the probability density functions for each feature, 
+                showing how the distribution of prices varies with different levels of cut quality, clarity grades, and color grades. 
+                By examining these KDE plots, we aim to uncover insights into how these attributes influence the pricing of diamonds, 
+                offering valuable insights into the diamond market and consumer preferences.
+            </p>
+            <div class="graphic">
+                <iframe src="density.html" width="100%" height="600px" frameborder="0"></iframe>
+            </div>
+            <p>
+                The graph showcases the distribution of observations across different price categories.
+                The highest peak across all categories appears to be concentrated near the lower end of the price scale.
+                This is pretty realistic because in the real world, cheaper diamonds will have a much bigger probability density
+                compared to the more luxurious diamonds.
+                In this visualization, each category exhibits distinct peaks at various price points, indicating where data points are most densely clustered.
+            </p>
+            <p>
+                Let's look at cut first, from looking at the heatmap from the previous section, the cut quality of diamonds should have a very minimal effect on price.
+                Diamonds with an "Ideal" cut demonstrate a peak in price distribution, 
+                indicating that diamonds with the highest quality cuts tend to command higher prices. 
+                As the cut quality decreases from Ideal to Fair, there is a noticeable decrease in price distribution, 
+                suggesting that diamonds with lower-quality cuts are generally priced lower.
+            </p>
+            <p>
+                Now let's look at color, from looking at the heatmap from the previous section, the color of diamonds should have a minimal positive effect
+                on the prices of diamonds. The KDE plot for diamond color versus price displays a similar trend to the cut plot. 
+                Diamonds with higher color grades (closer to colorless) show a peak in price distribution, 
+                indicating that diamonds with better color grades tend to be more expensive. 
+                Conversely, diamonds with lower color grades (closer to yellow) exhibit lower price distribution peaks, 
+                suggesting that diamonds with lower color grades are priced lower. 
+                This trend emphasizes the importance of color grade in determining diamond prices.
+            </p>
+            <p>
+                Lastly for clarity, from looking at the heatmap from the previous section, The clarity of diamonds should have a very minimal effect on 
+                prices of diamonds. In the KDE plot for diamond clarity versus price, 
+                we observe a similar pattern to the cut and color plots. 
+                Diamonds with higher clarity grades demonstrate a peak in price distribution, 
+                indicating that diamonds with better clarity grades tend to be more expensive. 
+                As the clarity grade decreases from "IF" (internally flawless) to "I1" (included), 
+                there is a noticeable decrease in price distribution, suggesting that diamonds with lower clarity grades are priced lower. 
+                This highlights the significance of clarity grade in determining diamond prices.
+            </p>
+        </div>
+        <div class="narrative">
+            <h2>Unlocking Diamond Dynamics: Exploring Interrelations</h2>
+            <p>
+                In this section, we delve into the intricate relationships between various characteristics of diamonds through visualization analysis. 
+                By visualizing how carat weight, cut quality, color grade, clarity grade, depth percentage, table width, and volume interrelate, 
+                we gain valuable insights into the factors that influence diamond quality and value. 
+                Let's explore how these features correlate with each other and uncover the hidden patterns within the world of diamonds.
+            </p>
+            <div class="graphic">
+                <iframe src="scatterplot.html" width="100%" height="600px" frameborder="0"></iframe>
+            </div>
+            <p>
+                In this visualization, there's a lot more freedom for the user to choose the variables they want to look at color coded by their respective prices.
+            </p>
+            <p>
+                <ul><strong>Cut, Color, Clarity, Depth, and Table vs Carat</strong>
+                    <li><strong>Cut vs Carat:</strong> There appears to be a slight positive trend between cut quality and carat weight, 
+                        indicating that larger diamonds tend to have better cut grades.</li>
+                    <li><strong>Color vs Carat:</strong> Similarly, there is a positive trend between color grade and carat weight, 
+                        suggesting that larger diamonds often exhibit better color grades.</li>
+                    <li><strong>Clarity vs Carat:</strong> The scatterplot of clarity grade against carat weight shows a positive trend, 
+                        indicating that larger diamonds tend to have higher clarity grades.</li>
+                    <li><strong>Depth vs. Carat and Table vs. Carat: </strong>Scatterplots of depth percentage and table width 
+                        against carat weight display scattered points with no clear trend, 
+                        suggesting that carat weight does not significantly influence these characteristics.</li>
+                </ul>
+                <ul><strong>Volume vs Other Variables</strong>
+                    <li><strong>Volume vs Cut, Color, Clarity: </strong>Scatterplots of volume against cut, color, and clarity exhibit similar trends to carat, 
+                        with larger volumes associated with higher quality cut, color, and clarity grades.</li>
+                    <li><strong>Volume vs Depth and Table: </strong>Scatterplots of volume against depth and table width also show scattered points with no clear trend, 
+                        indicating that volume is not strongly influenced by depth percentage or table width.</li>
+                </ul>
+            </p>
+        </div>
+        <div class="narrative">
+            <h2>Concluding Thoughts - The Power and Limits of Simplification</h2>
+            <p>
+                Our exploration of the diamonds dataset has illuminated many facets of the intricate world of diamond pricing and quality.
+                Through visualizations and data analysis, we've uncovered valuable insights into the factors that influence diamond prices, 
+                providing consumers and industry professionals with a deeper understanding of this complex market.
+            </p>
+            <p>
+                In conclusion, our journey through the diamonds dataset has shown that while certain factors like carat weight undeniably influence pricing, 
+                the true value of a diamond lies in its combination of characteristics.
+                Cut, color, clarity, and other features interact in complex ways to define a diamond's allure and worth, 
+                making the process of pricing both an art and a science. By unraveling these complexities,
+                we empower consumers and industry professionals to navigate the diamond market with greater clarity and confidence.
+            </p>
+        </div>
+        <div class="footer">
+            <footer>
+                <p>&copy; 2023 Minh Khuat</a></p>
+                <p>Done for Visualization Design, Analysis and Evaluation Coursework</p>
+            </footer>
+        </div>
     </body>
 </html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dynamic Variable Plot</title>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+    <body>
+        <!-- X Variable Selector -->
+        <label for="x-variable">Select X Variable:</label>
+        <select id="x-variable">
+            <option value="carat">Carat</option>
+            <option value="cut">Cut</option>
+            <option value="color">Color</option>
+            <option value="clarity">Clarity</option>
+            <option value="depth">Depth</option>
+            <option value="table">Table</option>
+            <option value="volume">Volume</option>
+        </select>
+        <!-- Y Variable Selector -->
+        <label for="y-variable">Select Y Variable:</label>
+        <select id="y-variable">
+            <option value="carat">Carat</option>
+            <option value="cut">Cut</option>
+            <option value="color">Color</option>
+            <option value="clarity">Clarity</option>
+            <option value="depth">Depth</option>
+            <option value="table">Table</option>
+            <option value="volume">Volume</option>
+            <!-- Add more options as needed -->
+        </select>
+        <!-- Plot Container -->
+        <div id="scatterplot"></div>
+        <script>
+            // Load the diamonds dataset
+            fetch("diamonds.csv")
+                .then(response => response.text())
+                .then(csvData => {
+                    const data = processData(csvData);
+                    
+                    // Encode categorical variables (cut, color, clarity) into numerical values
+                    const encodedData = data.map(row => ({
+                        ...row,
+                        cut: encodeCut(row.cut),
+                        color: encodeColor(row.color),
+                        clarity: encodeClarity(row.clarity),
+                        //volume: row.x * row.y * row.z
+                    }));
+                    console.log(encodedData)
+                    // Function to update the plot based on selected variables
+                    function updatePlot() {
+                        const xVariable = document.getElementById("x-variable").value;
+                        const yVariable = document.getElementById("y-variable").value;
+        
+                        const trace = {
+                            x: data.map(d => d[xVariable]),
+                            y: data.map(d => d[yVariable]),
+                            mode: 'markers',
+                            type: 'scatter',
+                            marker: {
+                                color: data.map(d => d['price']), // Use price as hue
+                                colorscale: 'Viridis', // Choose a color scale
+                                colorbar: {
+                                    title: 'Price'
+                                }
+                            }
+                        };
+        
+                        const layout = {
+                            title: `${xVariable} vs ${yVariable}`,
+                            xaxis: { title: xVariable },
+                            yaxis: { title: yVariable }
+                        };
+        
+                        Plotly.newPlot('scatterplot', [trace], layout);
+                    }
+                    
+                    //process csv data into array of objects
+                    function processData(csvData){
+                        const lines = csvData.split('\n');
+                        const headers = lines[0].split(',').map(header => header.replace(/^"|"$/g, ''));
+                        const data = [];
+                        for (let i = 1; i < lines.length; i++){
+                            const values = lines[i].split(',');
+                            if(values.length === headers.length){
+                                const obj = {};
+                                headers.forEach((header, index) => {
+                                    obj[header.trim()] = values[index].trim();
+                                });
+                                // for (let j = 0; j < headers.length; j++){
+                                //     obj[headers[j]] = values[j].replace(/\"/g, '').replace(/\\/g, '');
+                                // }
+                                // Convert numeric values to numbers
+                                obj['carat'] = parseFloat(obj['carat']);
+                                obj['depth'] = parseFloat(obj['depth']);
+                                obj['table'] = parseFloat(obj['table']);
+                                obj['price'] = parseInt(obj['price']);
+                                obj['x'] = parseFloat(obj['x']);
+                                obj['y'] = parseFloat(obj['y']);
+                                obj['z'] = parseFloat(obj['z']);
+                                obj['volume'] = obj['x'] * obj['y'] * obj['z'];
+                                // Convert numeric values to numbers
+                                data.push(obj);
+                            }
+                        }
+                        return data;
+                    }
+
+                    // Function to encode 'cut' into numerical values
+                    function encodeCut(cut) {
+                        cut = cut.replace(/\"/g, ''); // Remove double quotes
+                        switch (cut) {
+                            case 'Fair':
+                            return 0;
+                            case 'Good':
+                            return 1;
+                            case 'Very Good':
+                            return 2;
+                            case 'Premium':
+                            return 3;
+                            case 'Ideal':
+                            return 4;
+                            default:
+                            return -1; // Handle unknown categories if needed
+                        }
+                    }
+
+                    // Function to encode 'color' into numerical values
+                    function encodeColor(color) {
+                        color = color.replace(/\"/g, '');
+                        switch (color) {
+                            case 'D':
+                            return 0;
+                            case 'E':
+                            return 1;
+                            case 'F':
+                            return 2;
+                            case 'G':
+                            return 3;
+                            case 'H':
+                            return 4;
+                            case 'I':
+                            return 5;
+                            case 'J':
+                            return 6;
+                            default:
+                            return -1; // Handle unknown categories if needed
+                        }
+                    }
+
+                    // Function to encode 'clarity' into numerical values
+                    function encodeClarity(clarity) {
+                        clarity = clarity.replace(/\"/g, '');
+                        switch (clarity) {
+                            case 'I1':
+                            return 0;
+                            case 'SI2':
+                            return 1;
+                            case 'SI1':
+                            return 2;
+                            case 'VS2':
+                            return 3;
+                            case 'VS1':
+                            return 4;
+                            case 'VVS2':
+                            return 5;
+                            case 'VVS1':
+                            return 6;
+                            case 'IF':
+                            return 7;
+                            default:
+                            return -1; // Handle unknown categories if needed
+                        }
+                    }
+
+                    // Initial plot
+                    updatePlot();
+        
+                    // Event listeners to update plot when variable selections change
+                    document.getElementById("x-variable").addEventListener("change", updatePlot);
+                    document.getElementById("y-variable").addEventListener("change", updatePlot);
+                });
+        </script>
+    </body>
+</html>
